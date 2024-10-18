@@ -1,0 +1,203 @@
+﻿<Window x:Class="ToDoListProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToDoListProject"
+        mc:Ignorable="d"
+        Title="Manage Task" Height="500" Width="850"
+        Background="AntiqueWhite">
+        
+        
+    
+    <Grid>
+        
+        <TabControl x:Name="tab_MainTab" SelectionChanged="tab_MainTab_SelectionChanged">
+            <TabItem Header="Task" Margin="0,0,0,0">
+                <Grid Background="#FFE5E5E5" Height="441">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="lst_Todo" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,63" SelectionChanged="ListView_SelectionChanged" MaxHeight="350" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Height" Value="100"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="No" Width="30" DisplayMemberBinding="{Binding ToDo.Id}"/>
+                                <GridViewColumn Header="Name" Width="400" DisplayMemberBinding="{Binding ToDo.Name}"/>
+                                <GridViewColumn Header="Status" Width="120" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox ItemsSource="{Binding AllStatus}" 
+                                                      DisplayMemberPath="Name"
+                                                      SelectedItem="{Binding SelectedStatus}" Width="110" SelectionChanged="ComboBox_SelectionChanged">
+
+                                            </ComboBox>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Deadline" Width="170" DisplayMemberBinding="{Binding ToDo.Deadline}"/>
+                                <GridViewColumn Header="">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Done" Click="Button_Click_1"></Button>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StackPanel x:Name="stack1" HorizontalAlignment="Center" Height="36" Margin="0,370,0,0" VerticalAlignment="Center" Width="400" Orientation="Horizontal">
+                        <Button x:Name="btn_previous" Content="&lt;&lt;" Command="{Binding GoToPrevious}" Height="20" Click="btn_previous_Click" HorizontalAlignment="Center" />
+                        <ItemsControl x:Name="ctrl_paging" ItemsSource="{Binding PageNumbers}" VerticalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel>
+
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding pageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Click="Button_Click_2" IsCancel="False" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content=">>" Command="{Binding GoToNext}" Height="20" Click="Button_Click" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem HorizontalAlignment="Center" Height="20" Header="Detail" VerticalAlignment="Top" Width="60" Margin="0,0,0,0">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="txt_Name_detail" HorizontalAlignment="Left" Margin="173,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="569" FontSize="14"/>
+                    <Label Content="Name" HorizontalAlignment="Left" Margin="37,84,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <DatePicker x:Name="date_Deadline_detail" HorizontalAlignment="Left" Margin="173,269,0,0" VerticalAlignment="Top" FontSize="14" Width="122"/>
+                    <Label Content="Description" HorizontalAlignment="Left" Margin="37,131,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label Content="Deadline" HorizontalAlignment="Left" Margin="37,268,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.569,2.347" FontSize="14"/>
+                    <Label Content="Details" HorizontalAlignment="Left" Margin="37,22,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"/>
+                    <Border BorderBrush="Black" Margin="173,136,52,228" BorderThickness="1">
+                        <TextBox x:Name="txt_Description_detail" TextWrapping="Wrap" FontSize="14"/>
+                    </Border>
+                    <Label Content="Status" HorizontalAlignment="Left" Margin="37,325,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <ComboBox x:Name="cbo_Status_detail" HorizontalAlignment="Left" Margin="173,327,0,0" VerticalAlignment="Top" Width="285" FontSize="14"/>
+                    <Button x:Name="btn_Save" Content="Save" HorizontalAlignment="Left" Margin="397,373,0,0" VerticalAlignment="Top" FontSize="14" Click="btn_Save_Click"/>
+                    <TextBox x:Name="txt_Id_detail" HorizontalAlignment="Left" Margin="622,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Done" RenderTransformOrigin="1.306,0.411" Margin="0,0,0,0" Width="60" >
+                <Grid Background="#FFE5E5E5" Height="416">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="lst_Done" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,10,0,45"  Height="350" MaxHeight="350" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Height" Value="100"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="No" Width="30" DisplayMemberBinding="{Binding ToDo.Id}"/>
+                                <GridViewColumn Header="Name" Width="400" DisplayMemberBinding="{Binding ToDo.Name}"/>
+                                <GridViewColumn Header="Deadline" Width="170" DisplayMemberBinding="{Binding ToDo.Deadline}"/>
+                                <GridViewColumn Header="" x:Name="row_reOpen">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button x:Name="btn_ReOpen" Content="ReOpen" Click="btn_ReOpen_Click"></Button>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="36" Margin="0,370,0,0" VerticalAlignment="Top" Width="394">
+                        <Button Content="&lt;&lt;" Command="{Binding GoToPrevious}" Click="btn_previous_Click" Height="20"/>
+                        <ItemsControl x:Name="ctrl_paging1" ItemsSource="{Binding PageNumbers}" VerticalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel>
+
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding pageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Click="Button_Click_2" IsCancel="False" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content=">>" Command="{Binding GoToNext}" Click="Button_Click" Height="20"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="it_Add" HorizontalAlignment="Left" Height="20" Header="Add more" VerticalAlignment="Top" Width="65" Margin="0,0,0,0">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox x:Name="txt_Name" HorizontalAlignment="Left" Margin="173,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="569" FontSize="14"/>
+                    <Label Content="Name" HorizontalAlignment="Left" Margin="37,84,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <DatePicker x:Name="date_Deadline" HorizontalAlignment="Left" Margin="173,269,0,0" VerticalAlignment="Top" FontSize="14" Width="122"/>
+                    <Label Content="Description" HorizontalAlignment="Left" Margin="37,131,0,0" VerticalAlignment="Top" FontSize="14"/>
+                    <Label Content="Deadline" HorizontalAlignment="Left" Margin="37,268,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.569,2.347" FontSize="14"/>
+                    <Button x:Name="btn_Import" Content="Import From File" HorizontalAlignment="Left" Margin="678,373,0,0" VerticalAlignment="Top" FontSize="14" Click="btn_Import_Click"/>
+                    <Button x:Name="btn_Export" Content="Export As Json" HorizontalAlignment="Left" Margin="563,373,0,0" VerticalAlignment="Top" FontSize="14" Click="btn_Export_Click"/>
+                    <Label Content="Add things to do" HorizontalAlignment="Left" Margin="37,22,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"/>
+                    <Border BorderBrush="Black" Margin="173,136,52,214" BorderThickness="1">
+                        <TextBox x:Name="txt_Description" TextWrapping="Wrap" Height="105" VerticalAlignment="Top"/>
+                    </Border>
+                    <Button x:Name="btn_Add" Content="Add" HorizontalAlignment="Left" Margin="173,331,0,0" VerticalAlignment="Top" FontSize="14" Height="39" Width="101" Click="btn_Add_Click"/>
+                    <TextBox x:Name="txt_Jsonpath" HorizontalAlignment="Left" Margin="563,342,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="221" FontSize="14" IsReadOnly="True"/>
+                    <!-- <ComboBox x:Name="cbo_Member" HorizontalAlignment="Left" Margin="664,275,0,0" VerticalAlignment="Top" Width="120"/>
+                    <Label Content="Member" HorizontalAlignment="Left" Margin="563,271,0,0" VerticalAlignment="Top"/> -->
+
+                </Grid>
+            </TabItem>
+            <TabItem HorizontalAlignment="Center" Height="20" Header="OverDue" VerticalAlignment="Center" Width="60">
+                <Grid Background="#FFE5E5E5" Height="416">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="0*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="lst_overdue" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,10,0,45" Height="350" MaxHeight="350" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Height" Value="100"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="No" Width="30" DisplayMemberBinding="{Binding ToDo.Id}"/>
+                                <GridViewColumn Header="Name" Width="400" DisplayMemberBinding="{Binding ToDo.Name}"/>
+                                <GridViewColumn Header="Deadline" Width="170" DisplayMemberBinding="{Binding ToDo.Deadline}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="36" Margin="0,370,0,0" VerticalAlignment="Top" Width="391">
+                        <Button Content="&lt;&lt;" Command="{Binding GoToPrevious}" Click="btn_previous_Click" Height="20"/>
+                        <ItemsControl x:Name="ctrl_paging2" ItemsSource="{Binding PageNumbers}" VerticalAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel>
+
+                                    </WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding pageNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="30" Click="Button_Click_2" IsCancel="False" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Content=">>" Command="{Binding GoToNext}" Click="Button_Click" Height="20"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        
+    </Grid>
+    
+</Window>
